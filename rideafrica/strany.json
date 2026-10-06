@@ -1,0 +1,244 @@
+{
+ "_kak": "Одна запись в strany = одна страна: глава в прокрутке, карточка приключения, галочка в подписке и пункт меню. Порядок записей = порядок маршрута. Новая страна: скопировать блок, заполнить, положить ролики (stoki.py skachat ID или свой файл) и пересобрать кадры: python -X utf8 sajty/rideafrica/kadry.py (ночью). Замена видео на съёмку Rex: в kadry.src вместо номера Pexels — путь к файлу (относительно этой папки или полный), s/po — секунды отрезка, n — кадров, mx — центр выреза для телефона 0..1. Текст страны правится только здесь, index.html не трогать.",
+ "strany": [
+  {
+   "id": "morocco",
+   "name": "Morocco",
+   "glava": {
+    "h2": "The Sea of",
+    "akcent": "Dunes",
+    "p": "Over the Atlas Mountains to Chegaga, then a night under the Saharan stars."
+   },
+   "tur": {
+    "kick": "Dunes, the Atlas and five UNESCO sites. Off-road or road adventures available.",
+    "hl": [
+     "Atlas Mountains",
+     "Ride the \"Sea of Dunes\" at Chegaga",
+     "A night under the Saharan stars",
+     "Visit 5 UNESCO sites including Marrakech"
+    ],
+    "len": "6–16 days",
+    "bike": "KTM and BMW",
+    "when": "All year round"
+   },
+   "kartochka": {
+    "src": 34535419,
+    "alt": "Camel caravan crossing the Sahara dunes at sunset"
+   },
+   "kadry": [
+    {
+     "src": 33284824,
+     "s": 0.5,
+     "po": 8.0,
+     "n": 30,
+     "mx": 0.45,
+     "chto": "дюны сверху, машина идёт по гребню"
+    },
+    {
+     "src": 37491523,
+     "s": 3.0,
+     "po": 21.0,
+     "n": 44,
+     "mx": 0.52,
+     "chto": "мотоциклы с кофрами выходят из пыли на камеру"
+    },
+    {
+     "src": 28782169,
+     "s": 2.0,
+     "po": 14.0,
+     "n": 20,
+     "mx": 0.55,
+     "chto": "гребень большой дюны Сахары"
+    },
+    {
+     "src": 18980863,
+     "s": 0.5,
+     "po": 6.5,
+     "n": 14,
+     "mx": 0.5,
+     "chto": "касба и столовая гора"
+    },
+    {
+     "src": 34535419,
+     "s": 0.5,
+     "po": 10.0,
+     "n": 16,
+     "mx": 0.5,
+     "chto": "караван на закате"
+    },
+    {
+     "src": 29788915,
+     "s": 4.0,
+     "po": 14.0,
+     "n": 24,
+     "mx": 0.5,
+     "chto": "колесо бросает песок — переход"
+    }
+   ]
+  },
+  {
+   "id": "tanzania",
+   "name": "Tanzania",
+   "glava": {
+    "h2": "Into the",
+    "akcent": "Serengeti",
+    "p": "The great migration, a home stay in a Maasai village, Kilimanjaro on the horizon, and two nights in Zanzibar."
+   },
+   "tur": {
+    "kick": "Jungles, mountains and the famous game reserves, ending on the beach in Zanzibar.",
+    "hl": [
+     "The great migration of the Serengeti",
+     "A home stay in a Maasai village",
+     "Kilimanjaro and Mount Meru",
+     "Ride along an active volcano",
+     "Lake Natron, breeding ground of Lesser Flamingoes",
+     "2 nights in Zanzibar"
+    ],
+    "len": "5–16 days",
+    "bike": "Honda XR250, CRF 250L",
+    "when": "June – mid March"
+   },
+   "kartochka": {
+    "src": 6168935,
+    "alt": "Zebras crossing a golden plain"
+   },
+   "kadry": [
+    {
+     "src": 8334109,
+     "s": 1.0,
+     "po": 20.0,
+     "n": 22,
+     "mx": 0.45,
+     "chto": "вулкан над лесом"
+    },
+    {
+     "src": 6168935,
+     "s": 2.0,
+     "po": 22.0,
+     "n": 26,
+     "mx": 0.5,
+     "chto": "зебры на равнине"
+    },
+    {
+     "src": 11236995,
+     "s": 2.0,
+     "po": 29.0,
+     "n": 22,
+     "mx": 0.55,
+     "chto": "сафари-дорога сверху"
+    },
+    {
+     "src": 4829605,
+     "s": 0.0,
+     "po": 20.0,
+     "n": 22,
+     "mx": 0.45,
+     "chto": "жираф на закате"
+    }
+   ]
+  },
+  {
+   "id": "namibia",
+   "name": "Namibia",
+   "novaya": true,
+   "glava": {
+    "h2": "The red",
+    "akcent": "Namib",
+    "p": "Red dunes, mountain passes and long gravel roads through one of the least crowded countries on earth."
+   },
+   "tur": {
+    "kick": "Our newest route. The full itinerary, dates and bikes are coming soon.",
+    "hl": [
+     "Sossusvlei and the red dunes of the Namib",
+     "Mountain passes like Spreetshoogte",
+     "Long gravel roads across the desert"
+    ],
+    "len": "Soon",
+    "bike": "Soon",
+    "when": "Soon"
+   },
+   "kartochka": {
+    "src": 11563618,
+    "alt": "Camel thorn trees in front of the red dunes of the Namib"
+   },
+   "kadry": [
+    {
+     "src": 11563618,
+     "s": 0.5,
+     "po": 20.0,
+     "n": 32,
+     "mx": 0.55,
+     "chto": "красные дюны Соссусфлей и деревья (06.10: длиннее, на нём держится глава; дюны сверху 34162311 с бирюзовым небом и 11563682 сняты — короткие отрезки были сплошным наплывом)"
+    },
+    {
+     "src": 17977260,
+     "s": 2.0,
+     "po": 27.0,
+     "n": 18,
+     "mx": 0.6,
+     "chto": "серпантин перевала Спритсхогте"
+    },
+    {
+     "src": 34162365,
+     "s": 2.0,
+     "po": 24.0,
+     "n": 14,
+     "mx": 0.5,
+     "chto": "машина на пустынной дороге сверху"
+    }
+   ]
+  },
+  {
+   "id": "south-africa",
+   "name": "South Africa",
+   "glava": {
+    "h2": "Passes to the",
+    "akcent": "Cape",
+    "p": "Mountain passes, national parks, a night under the African sky, and the \"Road to Hell\"."
+   },
+   "tur": {
+    "kick": "Rarely seen, sparsely populated and amazing. From Cape Town into the passes.",
+    "hl": [
+     "Cape Town and Robben Island tour",
+     "Mountain passes",
+     "A night under the African sky",
+     "Travel through national parks",
+     "Ride the \"Road to Hell\""
+    ],
+    "len": "6–12 days",
+    "bike": "Royal Enfield, BMW",
+    "when": "All year round"
+   },
+   "kartochka": {
+    "src": 27758971,
+    "alt": "Table Mountain and Cape Town seen from the sea"
+   },
+   "kadry": [
+    {
+     "src": 17806710,
+     "s": 3.0,
+     "po": 33.0,
+     "n": 22,
+     "mx": 0.5,
+     "chto": "подлёт к Towerkop, Западный Кейп"
+    },
+    {
+     "src": 7109027,
+     "s": 2.0,
+     "po": 30.0,
+     "n": 22,
+     "mx": 0.4,
+     "chto": "побережье Кейптауна и серпантин"
+    },
+    {
+     "src": 27758971,
+     "s": 1.1,
+     "po": 2.1,
+     "n": 10,
+     "mx": 0.6,
+     "chto": "Столовая гора с моря — финал. 06.10: чисто только 1,1–2,2 с; раньше и позже в кадр бьёт лопасть винта, с 3,9 с — рама и блик окна вертолёта"
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,55 @@
+{
+ "count": 283,
+ "chapters": [
+  {
+   "id": "morocco",
+   "name": "Morocco",
+   "f0": 0,
+   "f1": 117,
+   "card": 93,
+   "alt": "Camel caravan crossing the Sahara dunes at sunset"
+  },
+  {
+   "id": "tanzania",
+   "name": "Tanzania",
+   "f0": 118,
+   "f1": 189,
+   "card": 145,
+   "alt": "Zebras crossing a golden plain"
+  },
+  {
+   "id": "namibia",
+   "name": "Namibia",
+   "f0": 190,
+   "f1": 238,
+   "card": 203,
+   "alt": "Camel thorn trees in front of the red dunes of the Namib"
+  },
+  {
+   "id": "south-africa",
+   "name": "South Africa",
+   "f0": 239,
+   "f1": 282,
+   "card": 278,
+   "alt": "Table Mountain and Cape Town seen from the sea"
+  }
+ ],
+ "sources": [
+  33284824,
+  37491523,
+  28782169,
+  18980863,
+  34535419,
+  29788915,
+  8334109,
+  6168935,
+  11236995,
+  4829605,
+  11563618,
+  17977260,
+  34162365,
+  17806710,
+  7109027,
+  27758971
+ ]
+}

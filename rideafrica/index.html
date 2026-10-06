@@ -1,0 +1,564 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ride Africa — motorcycle adventures across Africa</title>
+<meta name="robots" content="noindex">
+<meta name="description" content="Motorcycle adventures across Africa, from the Sahara to the Cape. Concept site for Ride Africa by g.a.d.">
+<meta name="theme-color" content="#15110D">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2315110D'/%3E%3Cpath d='M10 44 Q24 22 34 36 T54 30' fill='none' stroke='%23E2793A' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E">
+<!-- Демо для Rex Havoc (Ride Africa), 02.10.2026, ispolnitel. Образец устройства — konvjob/demo/sait/demo/gad-moto.
+     Видео только стоки Pexels 4K (слово Артура 02.10), источники — ISTOCHNIKI.md, сборка кадров — kadry.py. Текст — с rideafrica.net (KONTENT.md).
+     Страны (главы, карточки, меню, подписка) — strany.json: одна страна = один блок, здесь ничего не правится. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Instrument+Sans:wght@400;500;600&family=Martian+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@700&text=g.ad&display=swap" rel="stylesheet">
+<style>
+:root{
+  --night:#15110D; --dusk:#241C15; --sand:#EFE6D6; --paper:#F7F1E6; --ink:#1C1712; --dust:#7E6F5F;
+  --sun:#E2793A; /* закатный оранжевый с дюн в кадре */
+  --rule:rgba(28,23,18,.14); --rule-d:rgba(239,230,214,.16);
+  --disp:'Anton',Impact,sans-serif; --body:'Instrument Sans',system-ui,sans-serif; --mono:'Martian Mono',ui-monospace,monospace;
+  --pad:clamp(16px,3.4vw,52px); --band:72px; --navh:64px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--night);-webkit-text-size-adjust:100%}
+html.lenis,html.lenis body{height:auto}
+body{font-family:var(--body);font-size:16px;line-height:1.55;color:var(--ink);background:var(--sand);overflow-x:clip}
+a{color:inherit}
+button,input,select,textarea{font:inherit;color:inherit}
+img{display:block;max-width:100%}
+:focus-visible{outline:2px solid var(--sun);outline-offset:3px}
+section[id]{scroll-margin-top:calc(var(--navh) + 20px)}
+.sec[id]{scroll-margin-top:0} /* у них свой большой отступ сверху; иначе под шапкой торчит полоса маршрута */
+
+/* знак Ride Africa: слово + линия дороги */
+.mark{display:inline-flex;align-items:center;gap:10px;text-decoration:none;font:400 22px/1 var(--disp);letter-spacing:.04em;text-transform:uppercase;color:inherit}
+.mark svg{width:30px;height:18px;flex:none}
+
+.nav{position:fixed;z-index:50;top:max(12px,env(safe-area-inset-top));left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:26px;
+  height:52px;padding:0 8px 0 20px;border-radius:999px;color:var(--sand);background:rgba(21,17,13,.5);border:1px solid var(--rule-d);
+  backdrop-filter:blur(16px) saturate(1.3);-webkit-backdrop-filter:blur(16px) saturate(1.3);white-space:nowrap;font-size:14px}
+.nav .links{display:flex;gap:22px}
+.nav .links a{text-decoration:none;color:rgba(239,230,214,.72);transition:color .2s}
+.nav .links a:hover{color:#fff}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:44px;padding:0 20px;border-radius:999px;border:0;cursor:pointer;
+  font-weight:600;font-size:14px;text-decoration:none;background:var(--sun);color:#1A0F07;transition:transform .25s,background .25s}
+.btn:hover{transform:translateY(-1px);background:#EE8B4C}
+.btn.ghost{background:transparent;color:inherit;border:1px solid currentColor}
+.nav .burger{display:none}
+
+/* ===== история: прокрутка = дорога через четыре страны ===== */
+#story{position:relative;background:var(--night);color:var(--sand)}
+.stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden}
+.stage picture img,.stage canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.stage canvas{display:block}
+.grain{position:absolute;inset:-40%;pointer-events:none;opacity:.05;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation:gr 1.2s steps(5) infinite}
+@keyframes gr{0%{transform:translate(0,0)}25%{transform:translate(-3%,2%)}50%{transform:translate(2%,-3%)}75%{transform:translate(-2%,-1%)}100%{transform:translate(0,0)}}
+.shade{position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(14,11,8,.42) 0,rgba(14,11,8,0) 24%,rgba(14,11,8,0) 56%,rgba(14,11,8,.7) 100%)}
+
+.chap{position:absolute;inset:0;pointer-events:none;opacity:0;visibility:hidden;will-change:opacity}
+.chap .in{position:absolute;pointer-events:auto;will-change:transform}
+.chap::before{content:"";position:absolute;inset:0;background:linear-gradient(10deg,rgba(14,11,8,.74) 0,rgba(14,11,8,.3) 36%,rgba(14,11,8,0) 58%)}
+.chap.r::before{background:linear-gradient(-12deg,rgba(14,11,8,.74) 0,rgba(14,11,8,.3) 36%,rgba(14,11,8,0) 58%)}
+.chap .eyebrow{font:500 10.5px/1.6 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:rgba(239,230,214,.92);text-shadow:0 1px 10px rgba(0,0,0,.7)}
+.chap h1,.chap h2{font-family:var(--disp);font-weight:400;text-transform:uppercase;line-height:.88;letter-spacing:.01em}
+.chap h1{font-size:clamp(72px,10vw,176px);margin:14px 0 18px}
+.chap h2{font-size:clamp(48px,5.4vw,96px);margin:12px 0 14px}
+.chap p{max-width:36ch;font-size:clamp(15px,1.1vw,17px);color:rgba(239,230,214,.88)}
+.chap .row{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+.chap .alt{color:var(--sun)}
+.chap .in{left:var(--pad);bottom:calc(var(--band) + 42px);max-width:42vw}
+.chap.r .in{left:auto;right:var(--pad);max-width:36vw}
+.c0 .in{max-width:52vw}
+.cue{position:absolute;right:var(--pad);bottom:calc(var(--band) + 46px);font:500 10px/1 var(--mono);letter-spacing:.24em;text-transform:uppercase;color:rgba(239,230,214,.7)}
+.cue::after{content:"";display:block;width:1px;height:38px;margin:12px auto 0;background:linear-gradient(var(--sand),transparent);transform-origin:top;animation:cue 1.8s ease-in-out infinite}
+@keyframes cue{0%{transform:scaleY(0)}55%{transform:scaleY(1)}100%{transform:scaleY(1);opacity:0}}
+
+/* полоса маршрута: четыре страны, прокрутка = путь */
+.band{position:absolute;left:0;right:0;bottom:0;height:calc(var(--band) + env(safe-area-inset-bottom));padding:0 var(--pad) env(safe-area-inset-bottom);
+  display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:28px;border-top:1px solid var(--rule-d);
+  background:linear-gradient(180deg,rgba(18,14,10,.35),rgba(18,14,10,.8))}
+.where{min-width:200px}
+.where b{display:block;font:400 30px/1 var(--disp);letter-spacing:.03em;text-transform:uppercase}
+.where span{font:500 10px/1.3 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:rgba(239,230,214,.66)}
+.track{position:relative;height:44px}
+.track .base,.track .done{position:absolute;left:0;right:0;top:50%;height:1px;background:rgba(239,230,214,.28)}
+.track .done{height:2px;margin-top:-.5px;background:var(--sun);transform-origin:left;transform:scaleX(0)}
+.stop{position:absolute;top:50%;transform:translate(-50%,-50%);display:grid;justify-items:center;gap:6px;
+  font:500 9.5px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:rgba(239,230,214,.6);transition:color .3s}
+.stop i{width:9px;height:9px;border-radius:50%;border:1.5px solid currentColor;background:var(--night);transition:background .3s}
+.stop span{position:absolute;top:16px;white-space:nowrap}
+.stop.on{color:var(--sand)}
+.stop.on i{background:var(--sun);border-color:var(--sun)}
+.skip{min-height:40px;padding:0 16px;border-radius:999px;border:1px solid var(--rule-d);background:rgba(21,17,13,.4);color:var(--sand);font-size:13px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+.skip:hover{border-color:var(--sand)}
+
+/* ===== сайт под историей ===== */
+.wrap{padding:0 var(--pad);max-width:1440px;margin:0 auto}
+.sec{padding:clamp(72px,10vw,150px) 0 0}
+.sec-h{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;align-items:end;padding-bottom:36px;border-bottom:1px solid var(--rule)}
+.sec-h h2{font:400 clamp(52px,6.4vw,112px)/.88 var(--disp);text-transform:uppercase}
+.sec-h p{max-width:46ch;color:#4A4036;justify-self:end}
+.tag{font:500 10.5px/1.6 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--dust)}
+
+.adv{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:clamp(24px,4vw,64px);align-items:start;padding:clamp(36px,4vw,56px) 0;border-bottom:1px solid var(--rule)}
+.adv:nth-child(even) figure{order:2}
+.adv figure{position:relative;border-radius:4px;overflow:hidden;background:var(--dusk);aspect-ratio:16/10}
+.adv figure img{width:100%;height:100%;object-fit:cover}
+.adv figcaption{position:absolute;left:14px;bottom:12px;font:500 10px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:rgba(239,230,214,.88);text-shadow:0 1px 8px rgba(0,0,0,.6)}
+.adv h3{font:400 clamp(44px,4.6vw,76px)/.9 var(--disp);text-transform:uppercase}
+.adv .kick{margin:12px 0 22px;color:#4A4036;max-width:44ch}
+.adv ul{list-style:none;border-top:1px solid var(--rule)}
+.adv li{display:flex;gap:14px;padding:10px 0;border-bottom:1px solid var(--rule)}
+.adv li::before{content:"";flex:none;width:14px;height:2px;margin-top:11px;background:var(--sun)}
+.keys{display:grid;grid-template-columns:repeat(3,auto);justify-content:start;gap:4px 34px;margin:24px 0 26px;font:500 10.5px/1.5 var(--mono);color:var(--dust);text-transform:uppercase;letter-spacing:.08em}
+.keys b{display:block;font:400 24px/1.05 var(--disp);color:var(--ink);letter-spacing:.02em}
+.soon{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.soon small{font:500 10.5px/1.5 var(--mono);color:var(--dust);letter-spacing:.06em;text-transform:uppercase}
+.dark-btn{background:var(--ink);color:var(--sand)}
+.dark-btn:hover{background:#352B21}
+
+.rex{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(28px,5vw,80px);margin-top:40px}
+.rex .lead{font:400 clamp(34px,3.4vw,58px)/1 var(--disp);text-transform:uppercase}
+.rex .lead span{color:var(--sun)}
+.rex p+p{margin-top:16px}
+.rex .body{color:#3D342B;max-width:60ch}
+.mix{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin-top:34px;border-top:1px solid var(--rule)}
+.mix div{padding:18px 18px 0 0}
+.mix div+div{padding-left:18px;border-left:1px solid var(--rule)}
+.mix b{display:block;font:400 22px/1.05 var(--disp);text-transform:uppercase;margin-bottom:6px}
+.mix span{font-size:14px;color:#4A4036}
+
+/* подписка — тёмная полоса, как ночь в пустыне */
+.sub{margin-top:clamp(72px,10vw,150px);background:var(--night);color:var(--sand);padding:clamp(64px,8vw,120px) 0}
+.sub .grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:clamp(32px,5vw,80px)}
+.sub h2{font:400 clamp(60px,7.4vw,128px)/.86 var(--disp);text-transform:uppercase}
+.sub h2 span{color:var(--sun)}
+.sub .intro p{margin-top:22px;max-width:40ch;color:rgba(239,230,214,.8)}
+.contact{margin-top:32px;display:grid;gap:6px;font:500 12px/1.5 var(--mono);letter-spacing:.04em}
+.contact a{text-decoration:none;border-bottom:1px solid var(--rule-d);justify-self:start}
+.contact a:hover{border-color:var(--sun)}
+form{display:grid;grid-template-columns:1fr 1fr;gap:18px 20px;align-content:start}
+label{display:grid;gap:8px;font:500 10.5px/1.4 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:rgba(239,230,214,.72)}
+.full{grid-column:1/-1}
+input{width:100%;min-height:48px;padding:12px 14px;border-radius:4px;border:1px solid var(--rule-d);background:#1F1913;color:var(--sand);font-size:16px;text-transform:none;letter-spacing:0;font-family:var(--body)}
+input:focus{outline:none;border-color:var(--sun)}
+fieldset{border:0;display:flex;flex-wrap:wrap;gap:10px}
+fieldset legend{font:500 10.5px/1.4 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:rgba(239,230,214,.72);margin-bottom:8px}
+.chip{position:relative}
+.chip input{position:absolute;opacity:0;width:1px;height:1px;min-height:0}
+.chip span{display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border:1px solid var(--rule-d);border-radius:999px;font:500 14px var(--body);color:var(--sand);cursor:pointer;text-transform:none;letter-spacing:0}
+.chip input:checked+span{background:var(--sand);color:var(--ink);border-color:var(--sand)}
+.chip input:focus-visible+span{outline:2px solid var(--sun);outline-offset:3px}
+.status{grid-column:1/-1;min-height:1.5em;font-size:14px;color:#F3C9A6}
+.demo{font:500 10.5px/1.6 var(--mono);color:rgba(239,230,214,.55);letter-spacing:.04em}
+
+footer{background:var(--night);color:rgba(239,230,214,.6);border-top:1px solid var(--rule-d);padding:28px 0 calc(28px + env(safe-area-inset-bottom))}
+footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:center;font-size:13px}
+footer .mark{color:var(--sand)}
+footer .gad{font:700 15px/1 'Unbounded',var(--body);color:var(--sand);text-decoration:none;margin:0 2px}
+footer .gad:hover{color:var(--sun)}
+
+dialog.menu{margin:0;border:0;width:100%;max-width:none;height:100%;max-height:none;background:rgba(18,14,10,.96);color:var(--sand);
+  padding:calc(env(safe-area-inset-top) + 12px) var(--pad) 32px}
+dialog.menu::backdrop{background:rgba(0,0,0,.4)}
+.menu .top{display:flex;justify-content:space-between;align-items:center;height:52px}
+.menu nav{display:grid;margin-top:36px}
+.menu nav a{font:400 46px/1.15 var(--disp);text-transform:uppercase;text-decoration:none;padding:8px 0;border-bottom:1px solid var(--rule-d)}
+.menu .btn{margin-top:32px;width:100%}
+.icon-btn{width:44px;height:44px;display:grid;place-items:center;border-radius:999px;border:1px solid var(--rule-d);background:transparent;cursor:pointer;color:inherit}
+
+/* ===== телефон ===== */
+@media (max-width:760px){
+  :root{--band:64px;--navh:60px}
+  .nav{left:0;right:0;top:0;transform:none;border-radius:0;height:calc(var(--navh) + env(safe-area-inset-top));padding:env(safe-area-inset-top) 12px 0 var(--pad);justify-content:space-between;
+    border:0;border-bottom:1px solid var(--rule-d);background:rgba(21,17,13,.55)}
+  .nav .links,.nav>.btn{display:none}
+  .nav .burger{display:grid}
+  .chap h1{font-size:clamp(64px,19vw,92px);margin:0 0 16px}
+  .chap h2{font-size:clamp(44px,12vw,60px)}
+  .chap .in,.chap.r .in,.c0 .in{left:var(--pad);right:var(--pad);max-width:none;bottom:calc(var(--band) + 26px + env(safe-area-inset-bottom))}
+  .chap::before,.chap.r::before{background:linear-gradient(0deg,rgba(14,11,8,.8) 0,rgba(14,11,8,.35) 40%,rgba(14,11,8,0) 62%)}
+  .c0 .eyebrow,.c0 .skip{display:none}
+  .chap p{font-size:15px}
+  .cue{display:none}
+  .band{grid-template-columns:1fr auto;gap:14px}
+  .where{min-width:0}.where b{font-size:24px}.where span{display:none}
+  .track{grid-column:1/-1;grid-row:2;display:none}
+  .skip{min-height:44px;padding:0 14px;font-size:12px}
+  .sec-h{grid-template-columns:1fr;gap:16px}.sec-h p{justify-self:start}
+  .adv,.rex,.sub .grid{grid-template-columns:1fr}
+  .adv:nth-child(even) figure{order:0}
+  .keys{grid-template-columns:repeat(3,auto);gap:4px 22px}
+  .mix{grid-template-columns:1fr}
+  .mix div,.mix div+div{padding:16px 0;border-left:0;border-bottom:1px solid var(--rule)}
+  form{grid-template-columns:1fr}
+}
+@media (min-width:761px) and (max-width:1100px){
+  .nav .links{display:none}
+  .chap .in,.c0 .in{max-width:58vw}.chap.r .in{max-width:50vw}
+}
+
+/* меньше движения: неподвижный кадр, главы обычным потоком, кадры не грузятся */
+.rm #story{height:auto!important}
+.rm .stage{position:relative;height:auto;min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end}
+.rm .stage canvas,.rm .grain,.rm .cue,.rm .band{display:none}
+.rm .chap{position:relative;inset:auto;opacity:1;visibility:visible}
+.rm .chap .in{position:relative;inset:auto;max-width:640px;padding:40px var(--pad)}
+.rm .chap::before{display:none}
+.rm .c0{min-height:100svh;display:flex;align-items:flex-end;background:linear-gradient(0deg,rgba(14,11,8,.8),rgba(14,11,8,0) 60%)}
+.rm .chap:not(.c0){background:var(--night)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<header class="nav" aria-label="Main">
+  <a class="mark" href="#top" aria-label="Ride Africa, back to the top"><svg viewBox="0 0 30 18" aria-hidden="true"><path d="M2 15 Q10 2 16 10 T28 6" fill="none" stroke="#E2793A" stroke-width="2.6" stroke-linecap="round"/></svg>Ride Africa</a>
+  <nav class="links" aria-label="Sections">
+    <a href="#adventures">Adventures</a><a href="#about">The idea</a><a href="#subscribe">Dates &amp; prices</a>
+  </nav>
+  <a class="btn" href="#subscribe">Notify me</a>
+  <button class="icon-btn burger" type="button" aria-label="Open menu" aria-haspopup="dialog" aria-controls="menu">
+    <svg width="20" height="14" viewBox="0 0 20 14" aria-hidden="true"><path d="M0 1h20M0 7h20M0 13h12" stroke="currentColor" stroke-width="1.6"/></svg>
+  </button>
+</header>
+
+<dialog class="menu" id="menu" aria-label="Menu">
+  <div class="top">
+    <span class="mark">Ride Africa</span>
+    <button class="icon-btn" type="button" data-close aria-label="Close menu">
+      <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M1 1l14 14M15 1L1 15" stroke="currentColor" stroke-width="1.6"/></svg>
+    </button>
+  </div>
+  <nav aria-label="Menu sections" id="menu-links"><a href="#about">The idea</a></nav>
+  <a class="btn" href="#subscribe">Notify me about dates</a>
+</dialog>
+
+<main id="top">
+<section id="story" aria-label="The ride across Africa, told as you scroll">
+  <div class="stage">
+    <picture>
+      <source media="(max-width:760px)" srcset="frames/m/0000.webp">
+      <img src="frames/d/0000.webp" alt="Sand dunes of the Sahara seen from above, with tyre tracks running across them" fetchpriority="high">
+    </picture>
+    <canvas aria-hidden="true"></canvas>
+    <div class="shade"></div>
+    <div class="grain"></div>
+
+    <div class="chap c0" data-k="hero">
+      <div class="in">
+        <div class="eyebrow" data-strany>Motorcycle adventures</div>
+        <h1>Ride<br><span class="alt">Africa</span></h1>
+        <p>Africa has been the domain of high-end touring companies. Ride Africa opens it up to every motorcyclist.</p>
+        <div class="row"><a class="btn" href="#adventures">See the adventures</a><a class="skip" href="#adventures">Skip the ride ↓</a></div>
+      </div>
+      <div class="cue" aria-hidden="true">Scroll to ride</div>
+    </div>
+
+    <div class="band">
+      <div class="where" aria-hidden="true"><b data-where>Morocco</b><span data-step>Chapter 1 of 4</span></div>
+      <div class="track" aria-hidden="true"><div class="base"></div><div class="done"></div></div>
+      <a class="skip" href="#adventures">Skip the ride ↓</a>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+  <section class="sec" id="adventures">
+    <div class="sec-h">
+      <h2 data-skolko>The<br>adventures</h2>
+      <p>Each one mixes challenging riding, cultural experiences and relaxation. Some nights in luxury accommodation, some under the African sky.</p>
+    </div>
+    <div id="advs"></div>
+  </section>
+
+  <section class="sec" id="about">
+    <div class="sec-h">
+      <h2>The idea</h2>
+      <p>Ride Africa was conceived like so many ideas: around a bar with friends.</p>
+    </div>
+    <div class="rex">
+      <p class="lead">Cheap bikes, endless roads, <span>almost no riders.</span></p>
+      <div class="body">
+        <p>Rex was bewildered at the lack of motorcycle culture on his travels through Africa. Motorcycles are cheap to buy, easy to maintain and an efficient way to get around, and the riding, on road and off, is second to none: the dunes of Morocco, the jungles, mountains and game reserves of Tanzania, the red desert of Namibia, the sparsely populated corners of South Africa.</p>
+        <p>He has applied his experience from designing adventures for Himalayan Heroes to the colourful continent, to make it far more accessible to all motorcyclists.</p>
+        <div class="mix">
+          <div><b>Challenging riding</b><span>Road and off-road, dunes to mountain passes</span></div>
+          <div><b>Culture</b><span>Maasai villages, UNESCO sites and souks</span></div>
+          <div><b>Relaxation</b><span>Zanzibar, luxury stays, nights under the stars</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<section class="sub" id="subscribe">
+  <div class="wrap grid">
+    <div class="intro">
+      <h2>Dates &amp;<br>prices <span>soon</span></h2>
+      <p>Subscribe to hear first when dates and prices for the upcoming Ride Africa adventures are out.</p>
+      <div class="contact">
+        <a href="tel:+61405551422">+61 405 55 14 22</a>
+        <a href="mailto:info@rideafrica.net">info@rideafrica.net</a>
+      </div>
+      <p class="demo" style="margin-top:28px">Concept site: this form checks your answers but doesn't send them anywhere.</p>
+    </div>
+    <form id="form" novalidate>
+      <label>First name<input name="first" autocomplete="given-name"></label>
+      <label>Email address *<input name="email" type="email" autocomplete="email" required></label>
+      <fieldset class="full" id="picks"><legend>Which adventures interest you</legend></fieldset>
+      <div class="full"><button class="btn" type="submit">Subscribe</button></div>
+      <p class="status" role="status" aria-live="polite"></p>
+    </form>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span class="mark"><svg viewBox="0 0 30 18" aria-hidden="true"><path d="M2 15 Q10 2 16 10 T28 6" fill="none" stroke="#E2793A" stroke-width="2.6" stroke-linecap="round"/></svg>Ride Africa</span>
+    <span>Concept site by <a class="gad" href="https://smirnov-artur.github.io/works/en" target="_blank" rel="noopener">g.a.d.</a> Footage: Pexels stock, to be replaced with Ride Africa's own. Dates and prices are coming soon.</span>
+  </div>
+</footer>
+
+<script type="module">
+const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+
+/* ---------- страны — strany.json (одна страна = один блок), кадры — frames/manifest.json (пишет kadry.py) ---------- */
+const esc = v => String(v).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const [D, M] = await Promise.all(['strany.json', 'frames/manifest.json'].map(u => fetch(u).then(r => r.json()).catch(() => null)));
+const ADV = D?.strany || [];
+const COUNT = M?.count || 1, CH = (M?.chapters || []).filter(c => ADV.some(a => a.id === c.id)); // CH: [{id, name, f0, f1, card}]
+const SLOVO = ['One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten'][ADV.length - 1];
+
+$('[data-strany]').textContent = ['Motorcycle adventures', ...ADV.map(a => a.name)].join(' · ');
+if (SLOVO) $('[data-skolko]').innerHTML = `${SLOVO}<br>adventures`;
+$('#menu-links').insertAdjacentHTML('afterbegin', ADV.map(a => `<a href="#${esc(a.id)}">${esc(a.name)}</a>`).join(''));
+$('.stage .band').insertAdjacentHTML('beforebegin', ADV.map((a, i) => `<div class="chap c${i + 1}${i % 2 ? '' : ' r'}" data-k="${esc(a.id)}">
+      <div class="in">
+        <div class="eyebrow">Chapter ${i + 1} · ${esc(a.name)}</div>
+        <h2>${esc(a.glava.h2)} <span class="alt">${esc(a.glava.akcent)}</span></h2>
+        <p>${esc(a.glava.p)}</p>${i === ADV.length - 1 ? `
+        <div class="row"><a class="btn" href="#subscribe">Notify me about dates</a><a class="btn ghost" href="#adventures">See all adventures</a></div>` : ''}
+      </div>
+    </div>`).join(''));
+
+$('#advs').innerHTML = ADV.map((a, i) => {
+  const c = M?.chapters?.find(c => c.id === a.id), f = String(c?.card ?? 0).padStart(4, '0'), t = a.tur;
+  return `<article class="adv" id="${esc(a.id)}">
+    <figure><picture><source media="(max-width:760px)" srcset="frames/m/${f}.webp"><img src="frames/d/${f}.webp" alt="${esc(c?.alt || a.kartochka?.alt || a.name)}" loading="lazy" width="1280" height="720"></picture>
+      <figcaption>${String(i + 1).padStart(2, '0')} · ${esc(a.name)}</figcaption></figure>
+    <div>${a.novaya ? '<p class="tag">New route</p>' : ''}<h3>${esc(a.name)}</h3><p class="kick">${esc(t.kick)}</p>
+      <ul>${t.hl.map(h => `<li>${esc(h)}</li>`).join('')}</ul>
+      <div class="keys"><span><b>${esc(t.len)}</b>Length</span><span><b>${esc(t.bike)}</b>Motorcycle</span><span><b>${esc(t.when)}</b>Ideal time</span></div>
+      <div class="soon"><a class="btn dark-btn" href="#subscribe" data-pick="${esc(a.id)}">Notify me about dates</a><small>Dates &amp; prices coming soon</small></div>
+    </div></article>`;
+}).join('');
+$('#picks').insertAdjacentHTML('beforeend', ADV.map(a => `<label class="chip"><input type="checkbox" name="adv" value="${esc(a.id)}"><span>${esc(a.name)}</span></label>`).join(''));
+
+/* ---------- прокрутка: Lenis, если есть и движение не отключено ---------- */
+const rm = matchMedia('(prefers-reduced-motion: reduce)').matches || navigator.connection?.saveData === true || !CH.length;
+if (rm) document.documentElement.classList.add('rm');
+let lenis = null;
+if (!rm) {
+  try {
+    const { default: Lenis } = await import('https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.mjs');
+    lenis = new Lenis({ lerp: 0.1, wheelMultiplier: 0.9 });
+    const raf = t => { lenis.raf(t); requestAnimationFrame(raf); };
+    requestAnimationFrame(raf);
+  } catch (e) { lenis = null; } // без Lenis работает обычная прокрутка
+}
+function goTo(hash) {
+  const el = hash === '#top' ? document.body : $(hash);
+  if (!el) return;
+  if (lenis) lenis.scrollTo(hash === '#top' ? 0 : el, { offset: hash === '#top' ? 0 : -parseFloat(getComputedStyle(el).scrollMarginTop) || 0, duration: 1.2 });
+  else el.scrollIntoView({ behavior: rm ? 'auto' : 'smooth' });
+}
+document.addEventListener('click', e => {
+  const a = e.target.closest('a[href^="#"]');
+  if (!a) return;
+  e.preventDefault();
+  if (a.dataset.pick) { const b = $(`#picks input[value="${a.dataset.pick}"]`); if (b) b.checked = true; }
+  const m = $('#menu');
+  if (m.open) { m.close(); lenis?.start(); }
+  goTo(a.getAttribute('href'));
+  history.replaceState(null, '', a.getAttribute('href'));
+});
+
+/* ---------- меню телефона ---------- */
+const menu = $('#menu'), burger = $('.burger');
+burger.addEventListener('click', () => { menu.showModal(); lenis?.stop(); });
+$('[data-close]', menu).addEventListener('click', () => menu.close());
+menu.addEventListener('close', () => { lenis?.start(); burger.focus({ preventScroll: true }); });
+
+/* ---------- подписка: честная демо-отправка ---------- */
+$('#form').addEventListener('submit', e => {
+  e.preventDefault();
+  const f = e.currentTarget, st = $('.status', f);
+  if (!f.checkValidity()) { f.reportValidity(); st.textContent = 'Add your email address to subscribe.'; return; }
+  st.textContent = 'Not sent: this is a concept site. On the live site this goes to the Ride Africa mailing list.';
+});
+
+/* ---------- история: кадры в canvas ---------- */
+const story = $('#story'), stage = $('.stage'), canvas = $('canvas', stage), ctx = canvas.getContext('2d', { alpha: false });
+const chaps = $$('.chap', stage);
+const whereEl = $('[data-where]'), stepEl = $('[data-step]'), doneEl = $('.track .done'), trackEl = $('.track');
+/* остановки на полосе — по кадрам стран */
+trackEl.insertAdjacentHTML('beforeend', CH.map(c => `<div class="stop" style="left:${(100 * ((c.f0 + c.f1) / 2) / (COUNT - 1)).toFixed(2)}%"><i></i><span>${c.name}</span></div>`).join(''));
+const stops = $$('.stop', trackEl);
+
+/* шкала: высоты экрана → кадры. Герой держится, потом кадры идут ровно; на каждой стране глава держится чуть дольше. */
+const PER = { d: 36, m: 54 }; // кадров на высоту экрана: 267 кадров (06.10) ≈ 8 экранов на компьютере, 5 на телефоне, плюс паузы на главах
+function pace(v) {
+  const per = PER[v], beats = [[0, .7, 0, 0]]; let t = .7;
+  for (const c of CH) {
+    const mid = Math.round((c.f0 + c.f1) / 2), a = Math.max(c.f0, beats.at(-1)[3]);
+    const d1 = (mid - a) / per, hold = .35, d2 = (c.f1 - mid) / per;
+    beats.push([t, t + d1, a, mid]); t += d1;
+    beats.push([t, t + hold, mid, mid]); c[v] = [t - d1 * .4, t, t + hold, t + hold + d2 * .5]; t += hold; // окно главы
+    beats.push([t, t + d2, mid, c.f1]); t += d2;
+  }
+  beats.push([t, t + .6, COUNT - 1, COUNT - 1]);
+  return { travel: t + .6, beats };
+}
+const PACE = { d: pace('d'), m: pace('m') };
+const win = (k, v) => k === 'hero' ? [-1, 0, .45, .85] : (c => c ? (k === CH.at(-1).id ? [c[v][0], c[v][1], 99, 99] : c[v]) : [99, 99, 99, 99])(CH.find(c => c.id === k));
+
+class Seq {
+  constructor(dir) {
+    this.dir = dir; this.blobs = new Array(COUNT); this.bmps = new Map(); this.fails = new Uint8Array(COUNT);
+    this.pending = new Set(); this.decoding = new Set(); this.active = 0; this.cur = 0; this.dead = false;
+    this.ctrl = new AbortController(); this.max = dir === 'd' ? 40 : 56; this.onready = null;
+  }
+  url(i) { return `frames/${this.dir}/${String(i).padStart(4, '0')}.webp`; }
+  focus(i) { this.cur = i; this.pump(); this.decodeNear(); }
+  pick() {
+    let best = -1, bd = 1e9;
+    for (let i = 0; i < COUNT; i++) {
+      if (this.blobs[i] || this.pending.has(i) || this.fails[i] >= 3) continue;
+      let d = Math.abs(i - this.cur);
+      if (d > 14 && i % 6) d += 80; // сначала редкая сетка по всей истории, потом заполнение
+      if (d < bd) { bd = d; best = i; }
+    }
+    return best;
+  }
+  pump() {
+    while (!this.dead && this.active < 6) {
+      const i = this.pick();
+      if (i < 0) return;
+      this.active++; this.pending.add(i);
+      fetch(this.url(i), { signal: this.ctrl.signal })
+        .then(r => { if (!r.ok) throw new Error(r.status); return r.blob(); })
+        .then(b => { this.blobs[i] = b; if (Math.abs(i - this.cur) < 16) this.decodeNear(); })
+        .catch(() => { this.fails[i]++; })
+        .finally(() => { this.active--; this.pending.delete(i); this.pump(); });
+    }
+  }
+  decodeNear() {
+    for (let k = 0; k <= 14; k++) for (const i of [this.cur + k, this.cur - k]) {
+      if (i < 0 || i >= COUNT || !this.blobs[i] || this.bmps.has(i) || this.decoding.has(i)) continue;
+      if (this.decoding.size >= 4) return;
+      this.decoding.add(i);
+      createImageBitmap(this.blobs[i]).then(bm => {
+        this.decoding.delete(i);
+        if (this.dead) { bm.close(); return; }
+        this.bmps.set(i, bm); this.evict(); this.onready?.(i); this.decodeNear();
+      }).catch(() => { this.decoding.delete(i); this.fails[i]++; });
+    }
+  }
+  evict() {
+    while (this.bmps.size > this.max) {
+      let far = -1, fd = -1;
+      for (const i of this.bmps.keys()) { const d = Math.abs(i - this.cur); if (d > fd) { fd = d; far = i; } }
+      this.bmps.get(far).close(); this.bmps.delete(far);
+    }
+  }
+  nearest(i) {
+    if (this.bmps.has(i)) return this.bmps.get(i);
+    for (let k = 1; k < 24; k++) { if (this.bmps.has(i - k)) return this.bmps.get(i - k); if (this.bmps.has(i + k)) return this.bmps.get(i + k); }
+    return null;
+  }
+  dispose() { this.dead = true; this.ctrl.abort(); for (const b of this.bmps.values()) b.close(); this.bmps.clear(); this.blobs = []; }
+}
+
+const variant = () => innerWidth <= 760 ? 'm' : 'd';
+let V = variant(), seq = null, vh = innerHeight, lastW = innerWidth, drawn = null, dirty = true;
+
+function frameAt(t, beats) {
+  for (const [s0, s1, f0, f1] of beats) if (t <= s1) return f0 + (f1 - f0) * clamp((t - s0) / (s1 - s0 || 1), 0, 1);
+  return beats.at(-1)[3];
+}
+function ramp(t, [a, b, c, d]) { return t < a || t > d ? 0 : t < b ? (t - a) / (b - a) : t <= c ? 1 : 1 - (t - c) / (d - c); }
+function size() {
+  vh = innerHeight;
+  if (!rm) story.style.height = ((PACE[V].travel + 1) * vh) + 'px';
+  const dpr = Math.min(devicePixelRatio || 1, V === 'd' ? 1.5 : 2);
+  canvas.width = Math.round(stage.clientWidth * dpr); canvas.height = Math.round(stage.clientHeight * dpr);
+  dirty = true;
+}
+function draw(bm) {
+  const cw = canvas.width, ch = canvas.height, s = Math.max(cw / bm.width, ch / bm.height);
+  const w = bm.width * s, h = bm.height * s;
+  ctx.drawImage(bm, (cw - w) / 2, (ch - h) / 2, w, h);
+  drawn = bm; dirty = false;
+  canvas.style.opacity = 1;
+}
+let lastT = -1, lastC = -1;
+function tick() {
+  const top = story.getBoundingClientRect().top;
+  const inView = top < vh && top > -story.offsetHeight;
+  if (inView) {
+    const P = PACE[V], t = clamp(-top / vh, 0, P.travel);
+    const fr = frameAt(t, P.beats), f = Math.round(fr);
+    if (seq) {
+      if (f !== seq.cur) seq.focus(f);
+      const bm = seq.nearest(f);
+      if (bm && (bm !== drawn || dirty)) { draw(bm); canvas.dataset.frame = seq.bmps.get(f) === bm ? f : '~' + f; }
+    }
+    if (t !== lastT) {
+      lastT = t;
+      for (const c of chaps) {
+        const o = ramp(t, win(c.dataset.k, V));
+        const vis = o > 0.01;
+        c.style.opacity = o.toFixed(3);
+        c.style.visibility = vis ? 'visible' : 'hidden';
+        c.inert = !vis;
+        c.firstElementChild.style.transform = `translate3d(0,${((1 - o) * 22).toFixed(1)}px,0)`;
+      }
+      doneEl.style.transform = `scaleX(${(fr / (COUNT - 1)).toFixed(4)})`;
+      const ci = Math.max(0, CH.findIndex(c => fr <= c.f1));
+      if (ci !== lastC) {
+        lastC = ci; whereEl.textContent = CH[ci].name; stepEl.textContent = `Chapter ${ci + 1} of ${CH.length}`;
+        stops.forEach((s, j) => s.classList.toggle('on', j <= ci));
+      }
+    }
+  }
+  requestAnimationFrame(tick);
+}
+
+if (rm) {
+  chaps.forEach(c => { c.style.opacity = 1; c.style.visibility = 'visible'; });
+} else {
+  canvas.style.opacity = 0;
+  seq = new Seq(V); seq.onready = () => { dirty = dirty || !drawn; };
+  size(); seq.focus(0);
+  addEventListener('resize', () => {
+    if (innerWidth === lastW && Math.abs(innerHeight - vh) < 120) return; // адресная строка телефона — не пересчитывать
+    lastW = innerWidth;
+    const nv = variant();
+    if (nv !== V) { seq.dispose(); V = nv; drawn = null; seq = new Seq(V); seq.onready = () => { dirty = true; }; canvas.style.opacity = 0; }
+    size(); lastT = -1;
+  });
+  requestAnimationFrame(tick);
+}
+</script>
+<script>new Image().src='https://gad-production.ru/px?p='+encodeURIComponent(location.pathname)+'&r='+encodeURIComponent(document.referrer)+'&s='+encodeURIComponent(new URLSearchParams(location.search).get('src')||'')</script>
+</body>
+</html>
